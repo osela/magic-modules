@@ -535,6 +535,8 @@ func flattenBigtableCluster(c *bigtable.ClusterInfo) map[string]interface{} {
 		nodeScalingFactor = "NodeScalingFactor1X"
 	case bigtable.NodeScalingFactor2X:
 		nodeScalingFactor = "NodeScalingFactor2X"
+	default:
+		nodeScalingFactor = "NodeScalingFactor1X"
 	}
 
 	cluster := map[string]interface{}{
@@ -827,9 +829,9 @@ func resourceBigtableInstanceClusterReorderTypeListFunc(diff tpgresource.Terrafo
 func resourceBigtableInstanceImport(d *schema.ResourceData, meta interface{}) ([]*schema.ResourceData, error) {
 	config := meta.(*transport_tpg.Config)
 	if err := tpgresource.ParseImportId([]string{
-		"projects/(?P<project>[^/]+)/instances/(?P<name>[^/]+)",
-		"(?P<project>[^/]+)/(?P<name>[^/]+)",
-		"(?P<name>[^/]+)",
+		"^projects/(?P<project>[^/]+)/instances/(?P<name>[^/]+)$",
+		"^(?P<project>[^/]+)/(?P<name>[^/]+)$",
+		"^(?P<name>[^/]+)$",
 	}, d, config); err != nil {
 		return nil, err
 	}
